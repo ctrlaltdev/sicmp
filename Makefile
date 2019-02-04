@@ -1,22 +1,10 @@
-CC=gcc
-CFLAGS=-I. -O3 -Wall
-DEPS = icmp.h tunnel.h
+CC = gcc
+CFLAGS = -g -Wall
+SOURCE = src/sicmp.c src/icmp.c
+DEPS = src/icmp.h
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-icmptunnel: icmptunnel.o icmp.o tunnel.o
-	$(CC) -o icmptunnel icmp.o tunnel.o icmptunnel.o $(CFLAGS)
-
-test_server: icmp.o test_server.o
-	$(CC) -o test_server icmp.o test_server.o $(CFLAGS)
-
-test_client: icmp.o test_client.o
-	$(CC) -o test_client icmp.o test_client.o $(CFLAGS)
-
-test: test_server test_client
-
-all: icmptunnel test_server test_client
+all: $(SOURCE) $(DEPS)
+	$(CC) $(CFLAGS) $(SOURCE) $(DEPS) -o sicmp
 
 clean:
-	rm -f *.o test_server test_client icmptunnel
+	rm -f sicmp
